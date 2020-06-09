@@ -136,16 +136,16 @@ const addEmployees = () => {
         // new array from theTeam[] of only Engineers
         const filterEmployees = theTeam.filter(job => job.github);
         console.log(filterEmployees);
-        /* user chooses `no` but doesn't have any
+        /* user chooses `No` but doesn't have any
             engineers, call employeeInquirer() */
-        if (response.addEmployees === "no" && filterEmployees.length == 0) {
+        if (response.addEmployees === "No" && filterEmployees.length == 0) {
             console.log(`Your team needs at least one engineer.`);
             employeeInquirer();
         }
-        else if (response.addEmployees === "yes") {
+        else if (response.addEmployees === "Yes") {
             employeeInquirer();
         }
-        // // call function that writes files
+        // call function that writes files
         else {
             // placeholder
             console.log(theTeam);
