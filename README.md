@@ -1,5 +1,5 @@
 
-# Team Profile Generator
+# Team Profile Generator   (WORK IN PROGRESS!)
 Create a quick directory for your dev team.
 
 ![GitHub language count](https://img.shields.io/github/languages/count/gloriousLoaf/Team-Profile-Generator)
