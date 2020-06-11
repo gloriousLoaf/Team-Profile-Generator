@@ -14,6 +14,31 @@ const render = require("./lib/htmlRenderer");
 // theTeam[] will be an array of objects filled by teamInquirer()
 const theTeam = [];
 
+// Two functions to validate user input: validate() and emailValidator()
+// validate() makes sure that the user does not provide blank answers
+const validator = (val) => {
+    if (val !== ``) {
+        return true;
+    }
+}
+
+// emailValidator() validates... emails
+const emailValidator = (val) => {
+    if (val === ``) {
+        return false;
+    }
+    // Not blank? let's validate the syntax:
+    else {
+        /* RegExp defining an email as nonblankspaces+@+.+nonblankspaces
+            thanks top post by https://stackoverflow.com/users/270821/c-lee */
+        const email = /\S+@\S+\.\S+/;
+        let realEmail = email.test(val);
+        if (realEmail) {
+            return true;
+        }
+    }
+}
+
 /* every team has a Manager, manager() prompts user
     through creation and calls employeeInquirer() */
 const manager = () => {
@@ -21,22 +46,26 @@ const manager = () => {
         {
             type: `input`,
             name: `managerName`,
-            message: `Enter the name of the team manager:`
+            message: `Enter the name of the team manager:`,
+            validate: validator
         },
         {
             type: `input`,
             name: `managerId`,
-            message: `Enter manager ID:`
+            message: `Enter manager ID:`,
+            validate: validator
         },
         {
             type: `input`,
             name: `managerEmail`,
             message: `Enter manager email:`,
+            validate: emailValidator
         },
         {
             type: `input`,
             name: `managerOffice`,
-            message: `Enter manager office number:`
+            message: `Enter manager office number:`,
+            validate: validator
         }
     ])
         // with this data, build a new Manager obj and push to theTeam[]
@@ -63,17 +92,20 @@ const employeeInquirer = () => {
         {
             type: `input`,
             name: `employeeName`,
-            message: `Enter the employee's name:`
+            message: `Enter the employee's name:`,
+            validate: validator
         },
         {
             type: `input`,
             name: `employeeId`,
-            message: `Enter employee ID:`
+            message: `Enter employee ID:`,
+            validate: validator
         },
         {
             type: `input`,
             name: `employeeEmail`,
-            message: `Enter employee email:`
+            message: `Enter employee email:`,
+            validate: emailValidator
         },
         // logic based on the type of employee we're adding:
         // engineers need GH handle
@@ -81,14 +113,16 @@ const employeeInquirer = () => {
             when: answers => answers.employeeRole === `Engineer`,
             type: `input`,
             name: `github`,
-            message: `Enter their GitHub Username (no @):`
+            message: `Enter their GitHub Username (no @):`,
+            validate: validator
         },
         // interns need a school
         {
             when: answers => answers.employeeRole === "Intern",
             type: "input",
             name: "school",
-            message: "Where do they go to school?"
+            message: "Where do they go to school?",
+            validate: validator
         }
     ])
         /* logic to build correct new team member
@@ -120,7 +154,6 @@ const addEmployees = () => {
     ]).then(response => {
         // new array from theTeam[] of only Engineers
         const filterEmployees = theTeam.filter(job => job.github);
-        console.log(filterEmployees);
         /* user chooses `No` but doesn't have any
             engineers, call employeeInquirer() */
         if (response.addEmployees === "No" && filterEmployees.length == 0) {
@@ -132,8 +165,6 @@ const addEmployees = () => {
         }
         // call function that writes files
         else {
-            // placeholder
-            console.log(theTeam);
             fileWriter();
         }
     });
