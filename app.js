@@ -170,6 +170,8 @@ const addEmployees = () => {
     });
 }
 
+/* fileWriter() checks for or creates the output directory and
+    calls fs.writeFile, passing in outputPath and render with array */
 const fileWriter = () => {
     if (!fs.existsSync("./output")) {
         fs.mkdirSync("./output");
