@@ -8,25 +8,35 @@
     <title>My Team</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
         integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <link rel="stylesheet" href="style.css">
     <script src="https://kit.fontawesome.com/c502137733.js"></script>
 </head>
 
 <body>
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-12 jumbotron mb-3 team-heading">
-                <h1 class="text-center">My Team</h1>
-            </div>
-        </div>
+    <div class="col-12 jumbotron mb-3 pt-4 pb-4 text-light team-heading" style="background-color: #e40066">
+        <h1 class="text-center">Developer Team</h1>
+        <!-- IF I HAVE TIME: add a lil js to make this span show a creation timestamp -->
+        <!-- <h5 class="text-center">Updated <span class="time-stamp">(moment.js)</span></h5> -->
     </div>
     <div class="container">
         <div class="row">
-            <div class="team-area col-12 d-flex justify-content-center">
-                {{ team }}
+            <div class="col-sm-1"></div>
+            <div class="col-sm-10">
+                <div class="team-area card-wrapper">
+                    {{ team }}
+                </div>
             </div>
         </div>
+        <div class="col-sm-1"></div>
     </div>
 </body>
+
+<!-- class to wrap cards to new rows and space them out nicely -->
+<style>
+    .card-wrapper {
+        display: flex;
+        justify-content: space-evenly;
+        flex-wrap: wrap;
+    }
+</style>
 
 </html>

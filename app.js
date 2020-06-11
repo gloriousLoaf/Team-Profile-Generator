@@ -3,17 +3,12 @@ const Manager = require("./lib/Manager");
 const Engineer = require("./lib/Engineer");
 const Intern = require("./lib/Intern");
 const inquirer = require("inquirer");
-const util = require("util");
 const path = require("path");
 const fs = require("fs");
 
-// haven't been put to use yet
 const OUTPUT_DIR = path.resolve(__dirname, "output");
 const outputPath = path.join(OUTPUT_DIR, "team.html");
 const render = require("./lib/htmlRenderer");
-
-// in case I use similar file writing process as Team Generator:
-// const writeFileAsync = util.promisify(fs.writeFile);
 
 
 // theTeam[] will be an array of objects filled by teamInquirer()
@@ -26,27 +21,23 @@ const manager = () => {
         {
             type: `input`,
             name: `managerName`,
-            message: `Enter the name of the team manager:`,
-
+            message: `Enter the name of the team manager:`
         },
         {
             type: `input`,
             name: `managerId`,
-            message: `Enter manager ID:`,
-
+            message: `Enter manager ID:`
         },
         {
             type: `input`,
             name: `managerEmail`,
             message: `Enter manager email:`,
-
         },
         {
             type: `input`,
             name: `managerOffice`,
-            message: `Enter manager office number:`,
-
-        },
+            message: `Enter manager office number:`
+        }
     ])
         // with this data, build a new Manager obj and push to theTeam[]
         .then(response => {
@@ -72,20 +63,17 @@ const employeeInquirer = () => {
         {
             type: `input`,
             name: `employeeName`,
-            message: `Enter the employee's name:`,
-
+            message: `Enter the employee's name:`
         },
         {
             type: `input`,
             name: `employeeId`,
-            message: `Enter employee ID:`,
-
+            message: `Enter employee ID:`
         },
         {
             type: `input`,
             name: `employeeEmail`,
-            message: `Enter employee email:`,
-
+            message: `Enter employee email:`
         },
         // logic based on the type of employee we're adding:
         // engineers need GH handle
@@ -93,17 +81,15 @@ const employeeInquirer = () => {
             when: answers => answers.employeeRole === `Engineer`,
             type: `input`,
             name: `github`,
-            message: `Enter their GitHub Username (no @):`,
-
+            message: `Enter their GitHub Username (no @):`
         },
         // interns need a school
         {
             when: answers => answers.employeeRole === "Intern",
             type: "input",
             name: "school",
-            message: "Where do they go to school?",
-
-        },
+            message: "Where do they go to school?"
+        }
     ])
         /* logic to build correct new team member
             objects and push them to theTeam[] */
@@ -117,7 +103,6 @@ const employeeInquirer = () => {
                 theTeam.push(new Intern(response.employeeName, response.employeeId,
                     response.employeeEmail, response.school))
             }
-            console.log(theTeam);
             // see below
             addEmployees();
         })
@@ -136,21 +121,33 @@ const addEmployees = () => {
         // new array from theTeam[] of only Engineers
         const filterEmployees = theTeam.filter(job => job.github);
         console.log(filterEmployees);
-        /* user chooses `no` but doesn't have any
+        /* user chooses `No` but doesn't have any
             engineers, call employeeInquirer() */
-        if (response.addEmployees === "no" && filterEmployees.length == 0) {
+        if (response.addEmployees === "No" && filterEmployees.length == 0) {
             console.log(`Your team needs at least one engineer.`);
             employeeInquirer();
         }
-        else if (response.addEmployees === "yes") {
+        else if (response.addEmployees === "Yes") {
             employeeInquirer();
         }
-        // // call function that writes files
+        // call function that writes files
         else {
             // placeholder
             console.log(theTeam);
+            fileWriter();
         }
     });
 }
 
+const fileWriter = () => {
+    if (!fs.existsSync("./output")) {
+        fs.mkdirSync("./output");
+    }
+    fs.writeFile(outputPath, render(theTeam), error => {
+        if (error) throw error;
+        console.log("Created team.html successfully!");
+    });
+};
+
+// fire it
 manager();
